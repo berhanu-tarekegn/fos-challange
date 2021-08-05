@@ -1,12 +1,6 @@
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
 
 internal class SuperMapTest {
 
@@ -57,14 +51,14 @@ internal class SuperMapTest {
 
             val testSuperMap = SuperMap<String, String>()
 
-            val scope = CoroutineScope(newFixedThreadPoolContext(4, "synchronizationPool")) // We want our code to run on 4 threads
+            val scope = CoroutineScope(newFixedThreadPoolContext(4, ""))
             scope.launch {
 
                 val coroutines = 1.rangeTo(10).map {
 
                     launch {
 
-                        for (i in 1..4) { // and in each of them, increment the sharedCounter 1000 times.
+                        for (i in 1..4) {
                             testSuperMap.set("h${m}", "Hello${m}")
                             m++
                         }
@@ -74,7 +68,7 @@ internal class SuperMapTest {
 
                 coroutines.forEach {
                         corotuine->
-                    corotuine.join() // wait for all coroutines to finish their jobs.
+                    corotuine.join()
                 }
             }.join()
 
